@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# PlatformIO (firmware)
+firmware/.pio/
+firmware/.venv/
+
+# Python (backend)
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.env
+
+# Mosquitto runtime state (config se versiona, datos/logs no)
+mosquitto/data/*
+!mosquitto/data/.gitkeep
+mosquitto/log/*
+!mosquitto/log/.gitkeep
+
+# Frontend (futuro)
+frontend/node_modules/
