@@ -15,10 +15,14 @@ const char *eventTypeName(EventType type) {
 }  // namespace
 
 void printEvent(const Event &event) {
-  Serial.print("{\"tag_id\":\"");
-  Serial.print(event.tag_id, HEX);
-  Serial.print("\",\"type\":\"");
+  Serial.print("{\"type\":\"");
   Serial.print(eventTypeName(event.type));
+  Serial.print("\",\"data\":\"");
+  if (event.type == EventType::RFID) {
+    Serial.print(event.tag_id, HEX);
+  } else {
+    Serial.print(event.qr_data);
+  }
   Serial.print("\",\"timestamp_ms\":");
   Serial.print(event.timestamp_ms);
   Serial.println("}");

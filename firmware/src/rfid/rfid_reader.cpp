@@ -10,6 +10,7 @@ bool RfidReader::poll(Event &event) {
     return false;
   }
   event.tag_id = tag_id;
+  event.qr_data[0] = '\0';
   event.type = EventType::RFID;
   event.timestamp_ms = millis();
   return true;

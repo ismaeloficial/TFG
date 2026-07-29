@@ -2,19 +2,25 @@
 
 #include "config/pins.h"
 #include "events/event.h"
+#include "qr/qr_reader.h"
 #include "rfid/rfid_reader.h"
 
 RfidReader rfidReader;
+QrReader qrReader;
 
 void setup() {
   Serial.begin(115200);
   rfidReader.begin(pins::RFID_RX, pins::RFID_UART_NUM);
-  Serial.println("Acerca una etiqueta RFID al lector...");
+  qrReader.begin(pins::QR_RX, pins::QR_UART_NUM, pins::QR_BAUD_RATE);
+  Serial.println("Acerca una etiqueta RFID o escanea un QR...");
 }
 
 void loop() {
   Event event;
   if (rfidReader.poll(event)) {
+    printEvent(event);
+  }
+  if (qrReader.poll(event)) {
     printEvent(event);
   }
   delay(10);
