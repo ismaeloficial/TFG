@@ -10,6 +10,8 @@
             "includePath": [
                 "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/include",
                 "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/src",
+                "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
+                "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/.pio/libdeps/esp32dev/PubSubClient/src",
                 "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/.pio/libdeps/esp32dev/rdm6300/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
@@ -236,7 +238,6 @@
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                 "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
@@ -247,6 +248,8 @@
                 "path": [
                     "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/include",
                     "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/src",
+                    "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
+                    "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/.pio/libdeps/esp32dev/PubSubClient/src",
                     "/Users/ismaelarco_/Documents/UNIVERSIDAD/TFG/CODIGO/firmware/.pio/libdeps/esp32dev/rdm6300/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/freertos/include",
@@ -473,7 +476,6 @@
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                    "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                     "/Users/ismaelarco_/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
@@ -483,6 +485,7 @@
             "defines": [
                 "PLATFORMIO=60119",
                 "ARDUINO_ESP32_DEV",
+                "MQTT_MAX_PACKET_SIZE=512",
                 "HAVE_CONFIG_H",
                 "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",
                 "UNITY_INCLUDE_CONFIG_H",

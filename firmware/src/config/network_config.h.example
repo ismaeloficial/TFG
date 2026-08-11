@@ -1,0 +1,20 @@
+#pragma once
+
+#include <cstdint>
+
+// Plantilla de configuración de red. Copia este archivo como "network_config.h"
+// (sin el ".example") y rellena tus valores reales — ese archivo está en
+// .gitignore y no se sube al repositorio.
+namespace network_config {
+constexpr char WIFI_SSID[] = "TU_SSID_AQUI";
+constexpr char WIFI_PASSWORD[] = "TU_CONTRASEÑA_AQUI";
+
+// IP local del ordenador donde corre Mosquitto (docker-compose.yml). Cambia
+// esto cada vez que el ESP32 pase a una red distinta a la del broker.
+constexpr char MQTT_BROKER_HOST[] = "192.168.1.X";
+constexpr uint16_t MQTT_BROKER_PORT = 1883;
+constexpr char MQTT_TOPIC_EVENTS[] = "trazabilidad/eventos";
+
+// Identifica el punto físico de lectura, no la red WiFi usada.
+constexpr char READ_POINT[] = "estacion-1";
+}  // namespace network_config

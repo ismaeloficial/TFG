@@ -1,7 +1,5 @@
 #include "event.h"
 
-namespace {
-
 const char *eventTypeName(EventType type) {
   switch (type) {
     case EventType::RFID:
@@ -11,8 +9,6 @@ const char *eventTypeName(EventType type) {
   }
   return "UNKNOWN";
 }
-
-}  // namespace
 
 void printEvent(const Event &event) {
   Serial.print("{\"type\":\"");
