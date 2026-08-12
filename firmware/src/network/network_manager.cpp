@@ -10,6 +10,10 @@ constexpr uint32_t kTimeSyncTimeoutMs = 15000;
 // ~noviembre 2023 en epoch; sirve para distinguir "hora ya sincronizada" de
 // "hora todavía en 1970" mientras el NTP no ha respondido.
 constexpr time_t kMinValidEpoch = 1700000000;
+// Cuánto esperar entre reintentos de WiFi/MQTT dentro de loop(). Sin este
+// límite, un intento de conexión bloqueante en cada vuelta del bucle puede
+// dejar sin CPU al sondeo de RFID/QR mientras no haya red disponible.
+constexpr uint32_t kReconnectIntervalMs = 5000;
 }  // namespace
 
 bool NetworkManager::begin() {
@@ -76,9 +80,28 @@ bool NetworkManager::connectMqtt() {
 }
 
 void NetworkManager::loop() {
-  if (!mqttClient_.connected()) {
-    connectMqtt();
+  uint32_t now = millis();
+
+  if (WiFi.status() != WL_CONNECTED) {
+    // Sin WiFi no tiene sentido ni intentar MQTT. Reintenta como mucho cada
+    // kReconnectIntervalMs y vuelve enseguida — el resto de loop() (RFID/QR)
+    // sigue funcionando aunque la red esté caída.
+    if (now - lastWifiRetryMs_ > kReconnectIntervalMs) {
+      lastWifiRetryMs_ = now;
+      Serial.println("WiFi desconectado, reintentando...");
+      WiFi.reconnect();
+    }
+    return;
   }
+
+  if (!mqttClient_.connected()) {
+    if (now - lastMqttRetryMs_ > kReconnectIntervalMs) {
+      lastMqttRetryMs_ = now;
+      connectMqtt();
+    }
+    return;
+  }
+
   mqttClient_.loop();
 }
 

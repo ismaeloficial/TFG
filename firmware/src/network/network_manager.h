@@ -28,4 +28,6 @@ class NetworkManager {
 
   WiFiClient wifiClient_;
   PubSubClient mqttClient_{wifiClient_};
+  uint32_t lastWifiRetryMs_ = 0;
+  uint32_t lastMqttRetryMs_ = 0;
 };
