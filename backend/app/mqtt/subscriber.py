@@ -62,6 +62,12 @@ def create_mqtt_client() -> mqtt.Client:
     client.on_connect = _on_connect
     client.on_disconnect = _on_disconnect
     client.on_message = _on_message
+    # Por defecto paho-mqtt usa backoff exponencial (1s, 2s, 4s...) hasta 120s.
+    # Si el broker cae varias veces seguidas, el reintento puede quedar "dormido"
+    # bastante tiempo y perderse mensajes QoS 0 publicados justo cuando el broker
+    # ya está de vuelta pero el backend todavía no se ha reenganchado. Con un
+    # backoff corto y acotado se reduce mucho esa ventana.
+    client.reconnect_delay_set(min_delay=1, max_delay=5)
     return client
 
 

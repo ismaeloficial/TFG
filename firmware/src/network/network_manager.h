@@ -4,6 +4,7 @@
 #include <WiFi.h>
 
 #include "../events/event.h"
+#include "../storage/event_queue.h"
 
 // Gestiona WiFi, sincronización horaria (NTP) y publicación de eventos por MQTT.
 class NetworkManager {
@@ -16,18 +17,29 @@ class NetworkManager {
   // reconecta sola si se cae.
   void loop();
 
-  // Publica un evento en el topic configurado. Devuelve false si no hay
-  // conexión MQTT activa (el evento no se pierde del todo: sigue saliendo
-  // por Serial vía printEvent, solo no llega al backend).
+  // Publica un evento en el topic configurado. Si no hay conexión MQTT en
+  // ese momento, el evento se guarda en la cola local (LittleFS) en vez de
+  // perderse, y se reenvía solo más adelante cuando vuelva la red. Devuelve
+  // true solo si se publicó en el momento (false = publicado más tarde, o
+  // sin cola disponible).
   bool publishEvent(const Event &event);
 
  private:
   bool connectWifi();
   bool syncTime();
   bool connectMqtt();
+  bool publishRaw(const String &payload);
+  void flushQueueIfAny();
 
   WiFiClient wifiClient_;
   PubSubClient mqttClient_{wifiClient_};
+  EventQueue eventQueue_;
+  bool timeSynced_ = false;
   uint32_t lastWifiRetryMs_ = 0;
   uint32_t lastMqttRetryMs_ = 0;
+  uint32_t lastTimeSyncRetryMs_ = 0;
+  uint32_t lastQueueFlushMs_ = 0;
+  // Instante (millis()) en el que MQTT se conectó por última vez. Se usa para
+  // dar un margen de gracia antes de vaciar la cola local — ver flushQueueIfAny().
+  uint32_t mqttConnectedSinceMs_ = 0;
 };
