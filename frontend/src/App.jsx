@@ -1,24 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
-import BoxesPanel from "./components/BoxesPanel";
-import EventsTable from "./components/EventsTable";
-import { getBoxes } from "./api";
+import FichasCajaPanel from "./components/FichasCajaPanel";
+import HistorialTable from "./components/HistorialTable";
+import { getFichasCaja } from "./api";
 
 export default function App() {
-  const [boxes, setBoxes] = useState([]);
-  const [tab, setTab] = useState("eventos");
+  const [fichas, setFichas] = useState([]);
+  const [tab, setTab] = useState("historial");
 
-  const refreshBoxes = useCallback(() => {
-    getBoxes()
-      .then(setBoxes)
+  const refreshFichas = useCallback(() => {
+    getFichasCaja()
+      .then(setFichas)
       .catch(() => {});
   }, []);
 
   useEffect(() => {
-    refreshBoxes();
-  }, [refreshBoxes]);
+    refreshFichas();
+  }, [refreshFichas]);
 
-  const boxesByCode = useMemo(() => Object.fromEntries(boxes.map((b) => [b.code, b])), [boxes]);
+  const fichasByCode = useMemo(() => Object.fromEntries(fichas.map((f) => [f.code, f])), [fichas]);
 
   return (
     <div className="app">
@@ -28,16 +28,16 @@ export default function App() {
       </header>
 
       <nav className="tabs">
-        <button className={tab === "eventos" ? "active" : ""} onClick={() => setTab("eventos")}>
-          Eventos
+        <button className={tab === "historial" ? "active" : ""} onClick={() => setTab("historial")}>
+          Historial
         </button>
-        <button className={tab === "cajas" ? "active" : ""} onClick={() => setTab("cajas")}>
-          Cajas
+        <button className={tab === "fichas" ? "active" : ""} onClick={() => setTab("fichas")}>
+          Fichas de caja
         </button>
       </nav>
 
-      {tab === "eventos" && <EventsTable boxesByCode={boxesByCode} />}
-      {tab === "cajas" && <BoxesPanel boxes={boxes} onChanged={refreshBoxes} />}
+      {tab === "historial" && <HistorialTable fichasByCode={fichasByCode} />}
+      {tab === "fichas" && <FichasCajaPanel fichas={fichas} onChanged={refreshFichas} />}
     </div>
   );
 }

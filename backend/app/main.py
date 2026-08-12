@@ -5,8 +5,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
-from app.api.boxes import router as boxes_router
-from app.api.events import router as events_router
+from app.api.fichas_caja import router as fichas_caja_router
+from app.api.historial import router as historial_router
 from app.db.session import engine
 from app.mqtt.subscriber import start_mqtt_subscriber, stop_mqtt_subscriber
 
@@ -31,8 +31,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(events_router)
-app.include_router(boxes_router)
+app.include_router(historial_router)
+app.include_router(fichas_caja_router)
 
 
 @app.get("/health")

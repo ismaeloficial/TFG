@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createBox, updateBox } from "../api";
+import { createFichaCaja, updateFichaCaja } from "../api";
 
 const emptyForm = {
   code: "",
@@ -22,21 +22,21 @@ function toPayload(form) {
   };
 }
 
-export default function BoxesPanel({ boxes, onChanged }) {
+export default function FichasCajaPanel({ fichas, onChanged }) {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
 
-  function startEdit(box) {
-    setEditingId(box.id);
+  function startEdit(ficha) {
+    setEditingId(ficha.id);
     setForm({
-      code: box.code,
-      tipo_fruta: box.tipo_fruta,
-      variedad: box.variedad ?? "",
-      lote: box.lote ?? "",
-      fecha_recoleccion: box.fecha_recoleccion ?? "",
-      procedencia: box.procedencia ?? "",
-      peso_kg: box.peso_kg ?? "",
+      code: ficha.code,
+      tipo_fruta: ficha.tipo_fruta,
+      variedad: ficha.variedad ?? "",
+      lote: ficha.lote ?? "",
+      fecha_recoleccion: ficha.fecha_recoleccion ?? "",
+      procedencia: ficha.procedencia ?? "",
+      peso_kg: ficha.peso_kg ?? "",
     });
   }
 
@@ -50,20 +50,20 @@ export default function BoxesPanel({ boxes, onChanged }) {
     setError(null);
     try {
       if (editingId) {
-        await updateBox(editingId, toPayload(form));
+        await updateFichaCaja(editingId, toPayload(form));
       } else {
-        await createBox(toPayload(form));
+        await createFichaCaja(toPayload(form));
       }
       cancelEdit();
       onChanged();
     } catch (err) {
-      setError(err.response?.data?.detail ?? "Error guardando la caja");
+      setError(err.response?.data?.detail ?? "Error guardando la ficha de caja");
     }
   }
 
   return (
     <div className="panel">
-      <h2>Cajas</h2>
+      <h2>Fichas de caja</h2>
 
       <form onSubmit={handleSubmit} className="box-form">
         <input
@@ -130,25 +130,25 @@ export default function BoxesPanel({ boxes, onChanged }) {
           </tr>
         </thead>
         <tbody>
-          {boxes.map((box) => (
-            <tr key={box.id}>
-              <td className="mono">{box.code}</td>
-              <td>{box.tipo_fruta}</td>
-              <td>{box.variedad ?? "—"}</td>
-              <td>{box.lote ?? "—"}</td>
-              <td>{box.procedencia ?? "—"}</td>
-              <td>{box.peso_kg ?? "—"}</td>
+          {fichas.map((ficha) => (
+            <tr key={ficha.id}>
+              <td className="mono">{ficha.code}</td>
+              <td>{ficha.tipo_fruta}</td>
+              <td>{ficha.variedad ?? "—"}</td>
+              <td>{ficha.lote ?? "—"}</td>
+              <td>{ficha.procedencia ?? "—"}</td>
+              <td>{ficha.peso_kg ?? "—"}</td>
               <td>
-                <button className="secondary" onClick={() => startEdit(box)}>
+                <button className="secondary" onClick={() => startEdit(ficha)}>
                   Editar
                 </button>
               </td>
             </tr>
           ))}
-          {boxes.length === 0 && (
+          {fichas.length === 0 && (
             <tr>
               <td colSpan={7} className="empty">
-                Todavía no hay cajas dadas de alta.
+                Todavía no hay fichas de caja dadas de alta.
               </td>
             </tr>
           )}

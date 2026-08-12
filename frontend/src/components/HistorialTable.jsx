@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getEvents } from "../api";
+import { getHistorial } from "../api";
 
 const REFRESH_MS = 4000;
 
@@ -7,8 +7,8 @@ function formatDate(iso) {
   return new Date(iso).toLocaleString("es-ES");
 }
 
-export default function EventsTable({ boxesByCode }) {
-  const [events, setEvents] = useState([]);
+export default function HistorialTable({ fichasByCode }) {
+  const [historial, setHistorial] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ export default function EventsTable({ boxesByCode }) {
 
     async function load() {
       try {
-        const data = await getEvents();
+        const data = await getHistorial();
         if (!cancelled) {
-          setEvents(data);
+          setHistorial(data);
           setError(null);
         }
       } catch {
@@ -38,34 +38,36 @@ export default function EventsTable({ boxesByCode }) {
 
   return (
     <div className="panel">
-      <h2>Eventos de lectura</h2>
+      <h2>Historial de lecturas</h2>
       <p className="hint">Se actualiza solo cada {REFRESH_MS / 1000}s.</p>
       <table>
         <thead>
           <tr>
             <th>Tipo</th>
             <th>Valor leído</th>
-            <th>Caja</th>
+            <th>Ficha de caja</th>
             <th>Punto de lectura</th>
             <th>Leído</th>
           </tr>
         </thead>
         <tbody>
-          {events.map((ev) => {
-            const box = boxesByCode?.[ev.raw_value];
+          {historial.map((entry) => {
+            const ficha = fichasByCode?.[entry.raw_value];
             return (
-              <tr key={ev.id}>
+              <tr key={entry.id}>
                 <td>
-                  <span className={`badge badge-${ev.read_type.toLowerCase()}`}>{ev.read_type}</span>
+                  <span className={`badge badge-${entry.read_type.toLowerCase()}`}>{entry.read_type}</span>
                 </td>
-                <td className="mono">{ev.raw_value}</td>
-                <td>{box ? `${box.tipo_fruta}${box.variedad ? " · " + box.variedad : ""}` : "— sin asociar —"}</td>
-                <td>{ev.read_point ?? "—"}</td>
-                <td>{formatDate(ev.read_at)}</td>
+                <td className="mono">{entry.raw_value}</td>
+                <td>
+                  {ficha ? `${ficha.tipo_fruta}${ficha.variedad ? " · " + ficha.variedad : ""}` : "— sin asociar —"}
+                </td>
+                <td>{entry.read_point ?? "—"}</td>
+                <td>{formatDate(entry.read_at)}</td>
               </tr>
             );
           })}
-          {events.length === 0 && (
+          {historial.length === 0 && (
             <tr>
               <td colSpan={5} className="empty">
                 Todavía no hay lecturas. Acerca una tag al lector.

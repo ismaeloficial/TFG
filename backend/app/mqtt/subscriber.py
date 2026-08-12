@@ -5,9 +5,9 @@ from pydantic import ValidationError
 
 from app.core.config import settings
 from app.db.session import SessionLocal
-from app.models.box import Box
-from app.models.event import Event
-from app.schemas.event import EventIn
+from app.models.ficha_caja import FichaCaja
+from app.models.historial import Historial
+from app.schemas.historial import HistorialIn
 
 logger = logging.getLogger("app.mqtt")
 
@@ -26,33 +26,33 @@ def _on_disconnect(client, userdata, flags, reason_code, properties=None):
 
 def _on_message(client, userdata, msg):
     try:
-        payload = EventIn.model_validate_json(msg.payload)
+        payload = HistorialIn.model_validate_json(msg.payload)
     except ValidationError as exc:
         logger.warning("Payload inválido en topic '%s': %s | body=%r", msg.topic, exc, msg.payload)
         return
 
     db = SessionLocal()
     try:
-        box = db.query(Box).filter(Box.code == payload.raw_value).one_or_none()
-        event = Event(
-            box_id=box.id if box else None,
+        ficha = db.query(FichaCaja).filter(FichaCaja.code == payload.raw_value).one_or_none()
+        entrada = Historial(
+            ficha_caja_id=ficha.id if ficha else None,
             read_type=payload.read_type,
             raw_value=payload.raw_value,
             read_point=payload.read_point,
             read_at=payload.read_at,
         )
-        db.add(event)
+        db.add(entrada)
         db.commit()
         logger.info(
-            "Evento guardado: %s '%s' (box_id=%s, read_point=%s)",
+            "Historial guardado: %s '%s' (ficha_caja_id=%s, read_point=%s)",
             payload.read_type,
             payload.raw_value,
-            event.box_id,
+            entrada.ficha_caja_id,
             payload.read_point,
         )
     except Exception:
         db.rollback()
-        logger.exception("Error guardando evento MQTT en la base de datos")
+        logger.exception("Error guardando entrada de historial MQTT en la base de datos")
     finally:
         db.close()
 

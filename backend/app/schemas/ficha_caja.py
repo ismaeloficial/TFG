@@ -5,8 +5,8 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, field_validator
 
 
-class BoxIn(BaseModel):
-    """Payload para dar de alta una caja."""
+class FichaCajaIn(BaseModel):
+    """Payload para dar de alta una ficha de caja."""
 
     code: str
     tipo_fruta: str
@@ -24,7 +24,7 @@ class BoxIn(BaseModel):
         return value.strip()
 
 
-class BoxOut(BaseModel):
+class FichaCajaOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int

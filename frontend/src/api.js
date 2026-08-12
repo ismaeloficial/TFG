@@ -4,12 +4,13 @@ const api = axios.create({
   baseURL: "http://localhost:8001",
 });
 
-export const getEvents = () => api.get("/events").then((res) => res.data);
+export const getHistorial = () => api.get("/historial").then((res) => res.data);
 
-export const getBoxes = () => api.get("/boxes").then((res) => res.data);
+export const getFichasCaja = () => api.get("/fichas-caja").then((res) => res.data);
 
-export const createBox = (box) => api.post("/boxes", box).then((res) => res.data);
+export const createFichaCaja = (ficha) => api.post("/fichas-caja", ficha).then((res) => res.data);
 
-export const updateBox = (id, box) => api.put(`/boxes/${id}`, box).then((res) => res.data);
+export const updateFichaCaja = (id, ficha) =>
+  api.put(`/fichas-caja/${id}`, ficha).then((res) => res.data);
 
 export default api;

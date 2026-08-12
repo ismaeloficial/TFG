@@ -3,8 +3,8 @@ from sqlalchemy import BigInteger, Column, Date, DateTime, Numeric, String, func
 from app.db.session import Base
 
 
-class Box(Base):
-    __tablename__ = "boxes"
+class FichaCaja(Base):
+    __tablename__ = "fichas_caja"
 
     id = Column(BigInteger, primary_key=True)
     code = Column(String, nullable=False, unique=True)

@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 READ_TYPES = ("RFID", "QR")
 
 
-class EventIn(BaseModel):
+class HistorialIn(BaseModel):
     """Payload que publica el firmware por MQTT."""
 
     raw_value: str
@@ -29,13 +29,13 @@ class EventIn(BaseModel):
         return value
 
 
-class EventOut(BaseModel):
-    """Respuesta de la API para un evento ya persistido."""
+class HistorialOut(BaseModel):
+    """Respuesta de la API para una entrada de historial ya persistida."""
 
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    box_id: Optional[int]
+    ficha_caja_id: Optional[int]
     read_type: str
     raw_value: str
     read_point: Optional[str]
