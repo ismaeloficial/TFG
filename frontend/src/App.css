@@ -1,3 +1,23 @@
+:root {
+  /* Paleta "agrícola": fondos cálidos tipo papel/trigo en vez de blanco/gris frío,
+     verde ya existente como acento principal, terracota como acento secundario. */
+  --color-bg: #f7f2e7;
+  --color-panel: #fffdf8;
+  --color-border: #e6dcc6;
+  --color-border-soft: #efe7d4;
+  --color-text: #2e2a20;
+  --color-text-muted: #7a6f5c;
+  --color-text-faint: #a49877;
+  --color-primary: #2f8f4e;
+  --color-primary-dark: #226b3a;
+  --color-primary-hover: #267740;
+  --color-primary-soft: #e8f2e6;
+  --color-accent: #a8672f;
+  --color-accent-dark: #8a5323;
+  --color-danger: #b3261e;
+  --color-danger-bg: #fbeae5;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -5,8 +25,8 @@
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #f4f5f7;
-  color: #1a1a1a;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 .app {
@@ -22,14 +42,14 @@ header h1 {
 
 .subtitle {
   margin: 4px 0 24px;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .tabs {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tabs button {
@@ -38,19 +58,19 @@ header h1 {
   padding: 10px 16px;
   font-size: 0.95rem;
   cursor: pointer;
-  color: #555;
+  color: var(--color-text-muted);
   border-bottom: 2px solid transparent;
 }
 
 .tabs button.active {
-  color: #1a1a1a;
-  border-bottom-color: #2f8f4e;
+  color: var(--color-text);
+  border-bottom-color: var(--color-primary);
   font-weight: 600;
 }
 
 .panel {
-  background: #fff;
-  border: 1px solid #e3e3e3;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   padding: 20px;
 }
@@ -60,7 +80,7 @@ header h1 {
 }
 
 .hint {
-  color: #888;
+  color: var(--color-text-faint);
   font-size: 0.85rem;
   margin-top: -8px;
 }
@@ -77,9 +97,9 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #fff;
-  color: #333;
-  border: 1px solid #ccc;
+  background: var(--color-panel);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   padding: 8px 14px;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -87,13 +107,13 @@ header h1 {
 }
 
 .filtro-btn:hover {
-  border-color: #999;
+  border-color: var(--color-accent);
 }
 
 .filtro-btn-activo {
-  background: #eaf5ee;
-  border-color: #2f8f4e;
-  color: #226b3a;
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
   font-weight: 600;
 }
 
@@ -134,7 +154,7 @@ header h1 {
 .tabla-scroll thead th {
   position: sticky;
   top: 0;
-  background: #fff;
+  background: var(--color-panel);
   z-index: 1;
 }
 
@@ -174,19 +194,19 @@ header h1 {
 .segmented-control {
   display: inline-flex;
   align-self: flex-start;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 8px;
 }
 
 .segmented-control button {
-  background: #fff;
+  background: var(--color-panel);
   border: none;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid var(--color-border);
   padding: 5px 12px;
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
@@ -195,7 +215,7 @@ header h1 {
 }
 
 .segmented-control button.activo {
-  background: #2f8f4e;
+  background: var(--color-primary);
   color: #fff;
 }
 
@@ -205,11 +225,11 @@ header h1 {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #999;
+  color: var(--color-text-faint);
   font-size: 0.85rem;
-  background: #fafafa;
+  background: var(--color-bg);
   border-radius: 8px;
-  border: 1px dashed #ddd;
+  border: 1px dashed var(--color-border);
 }
 
 /* ---- Modal de filtros ---- */
@@ -226,7 +246,7 @@ header h1 {
 }
 
 .modal-filtros {
-  background: #fff;
+  background: var(--color-panel);
   border-radius: 14px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   width: 100%;
@@ -242,7 +262,7 @@ header h1 {
   align-items: center;
   justify-content: space-between;
   padding: 18px 24px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-filtros-header h3 {
@@ -255,19 +275,19 @@ header h1 {
   border: none;
   font-size: 1.4rem;
   line-height: 1;
-  color: #999;
+  color: var(--color-text-faint);
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 6px;
 }
 
 .modal-cerrar:hover {
-  background: #f0f0f0;
-  color: #333;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 .modal-filtros-body {
-  background: #f6f7f8;
+  background: var(--color-bg);
   padding: 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -286,18 +306,18 @@ header h1 {
 
 .filtro-campo label {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .filtro-campo select,
 .filtro-campo input {
   padding: 9px 11px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #1a1a1a;
-  background: #fff;
+  color: var(--color-text);
+  background: var(--color-panel);
   width: 100%;
   box-sizing: border-box;
 }
@@ -305,7 +325,7 @@ header h1 {
 .filtro-campo select:focus,
 .filtro-campo input:focus {
   outline: none;
-  border-color: #2f8f4e;
+  border-color: var(--color-primary);
 }
 
 .modal-filtros-footer {
@@ -313,15 +333,15 @@ header h1 {
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 24px;
-  border-top: 1px solid #e5e5e5;
-  background: #fafafa;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
   border-radius: 0 0 14px 14px;
 }
 
 .filtro-limpiar {
-  background: #fff;
-  border: 1px solid #ccc;
-  color: #555;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
   padding: 9px 16px;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -329,12 +349,12 @@ header h1 {
 }
 
 .filtro-limpiar:hover {
-  border-color: #999;
-  color: #333;
+  border-color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
 .filtro-aplicar {
-  background: #2f8f4e;
+  background: var(--color-primary);
   border: none;
   color: #fff;
   padding: 9px 20px;
@@ -345,7 +365,7 @@ header h1 {
 }
 
 .filtro-aplicar:hover {
-  background: #267740;
+  background: var(--color-primary-hover);
 }
 
 table {
@@ -359,11 +379,11 @@ th,
 td {
   text-align: left;
   padding: 8px 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 th {
-  color: #666;
+  color: var(--color-text-muted);
   font-weight: 600;
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -375,7 +395,7 @@ th {
 
 .empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-faint);
   padding: 24px;
 }
 
@@ -397,8 +417,8 @@ th {
 }
 
 .error {
-  color: #b3261e;
-  background: #fdecea;
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -413,9 +433,11 @@ th {
 
 .box-form input {
   padding: 8px 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.9rem;
+  background: var(--color-panel);
+  color: var(--color-text);
 }
 
 .form-actions {
@@ -426,7 +448,7 @@ th {
 
 button[type="submit"],
 .form-actions button:not(.secondary) {
-  background: #2f8f4e;
+  background: var(--color-primary);
   color: #fff;
   border: none;
   padding: 9px 18px;
@@ -436,8 +458,8 @@ button[type="submit"],
 }
 
 .secondary {
-  background: #eee;
-  color: #333;
+  background: var(--color-border-soft);
+  color: var(--color-text);
   border: none;
   padding: 6px 14px;
   border-radius: 6px;

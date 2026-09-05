@@ -161,7 +161,7 @@ export default function HistorialTable({ fichas = [], fichasByCode }) {
           </div>
         </div>
         <div className="panel grafica-panel">
-          <h3>Lecturas por día</h3>
+          <h3>Lecturas por día / mes / año</h3>
           <GraficaLecturasPorDia historial={historial} />
         </div>
       </div>
