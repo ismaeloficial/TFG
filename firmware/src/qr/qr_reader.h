@@ -16,4 +16,10 @@ class QrReader {
   HardwareSerial *serial_ = nullptr;
   char buffer_[sizeof(Event::qr_data)];
   uint8_t buffer_len_ = 0;
+
+  // Anti-rebote: en Continuous Mode el módulo vuelve a leer el mismo código
+  // varias veces por segundo mientras siga delante del lector. Se ignoran
+  // relecturas del mismo código dentro de kDuplicateCooldownMs (ver .cpp).
+  char lastCode_[sizeof(Event::qr_data)] = {0};
+  uint32_t lastReadMs_ = 0;
 };

@@ -19,9 +19,11 @@ constexpr uint32_t kQueueFlushIntervalMs = 2000;
 // Margen de gracia tras reconectar MQTT antes de empezar a vaciar la cola.
 // La ESP32 y el backend reconectan cada uno por su cuenta, sin coordinarse;
 // si el primer evento se reenvía antes de que el backend se haya vuelto a
-// suscribir, se pierde sin más (QoS 0 no avisa ni reintenta). Esta espera
-// le da tiempo al backend a ponerse al día.
-constexpr uint32_t kQueueFlushGraceMs = 4000;
+// suscribir, se pierde sin más (QoS 0 no avisa ni reintenta). El backend
+// usa un backoff de reconexión de hasta 5s (ver mqtt/subscriber.py), así
+// que este margen debe superarlo con holgura — 4s no era suficiente y
+// causaba pérdidas reales de eventos en pruebas (confirmado el 26 ago).
+constexpr uint32_t kQueueFlushGraceMs = 8000;
 }  // namespace
 
 bool NetworkManager::begin() {

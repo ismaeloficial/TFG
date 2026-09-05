@@ -36,7 +36,7 @@ export default function App() {
         </button>
       </nav>
 
-      {tab === "historial" && <HistorialTable fichasByCode={fichasByCode} />}
+      {tab === "historial" && <HistorialTable fichas={fichas} fichasByCode={fichasByCode} />}
       {tab === "fichas" && <FichasCajaPanel fichas={fichas} onChanged={refreshFichas} />}
     </div>
   );

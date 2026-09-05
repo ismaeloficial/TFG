@@ -2,6 +2,11 @@
 
 #include <string.h>
 
+namespace {
+// Tiempo mínimo antes de aceptar una relectura del mismo código (ver comentario en qr_reader.h).
+constexpr uint32_t kDuplicateCooldownMs = 12000;
+}  // namespace
+
 void QrReader::begin(int rx_pin, uint8_t uart_num, uint32_t baud_rate) {
   serial_ = new HardwareSerial(uart_num);
   serial_->begin(baud_rate, SERIAL_8N1, rx_pin, -1);
@@ -22,11 +27,24 @@ bool QrReader::poll(Event &event) {
     }
 
     buffer_[buffer_len_] = '\0';
+
+    uint32_t now = millis();
+    bool sameAsLast = strcmp(buffer_, lastCode_) == 0;
+    if (sameAsLast && (now - lastReadMs_) < kDuplicateCooldownMs) {
+      buffer_len_ = 0;
+      continue;  // mismo código leído hace menos de kDuplicateCooldownMs -- se ignora
+    }
+
     strncpy(event.qr_data, buffer_, sizeof(event.qr_data) - 1);
     event.qr_data[sizeof(event.qr_data) - 1] = '\0';
     event.tag_id = 0;
     event.type = EventType::QR;
-    event.timestamp_ms = millis();
+    event.timestamp_ms = now;
+
+    strncpy(lastCode_, buffer_, sizeof(lastCode_) - 1);
+    lastCode_[sizeof(lastCode_) - 1] = '\0';
+    lastReadMs_ = now;
+
     buffer_len_ = 0;
     return true;
   }
