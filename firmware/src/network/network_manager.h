@@ -42,4 +42,7 @@ class NetworkManager {
   // Instante (millis()) en el que MQTT se conectó por última vez. Se usa para
   // dar un margen de gracia antes de vaciar la cola local — ver flushQueueIfAny().
   uint32_t mqttConnectedSinceMs_ = 0;
+  // true mientras el WiFi está caído; permite imprimir un aviso una sola vez
+  // al recuperarse, en vez de no decir nada cuando la reconexión sí funciona.
+  bool wifiWasDown_ = false;
 };

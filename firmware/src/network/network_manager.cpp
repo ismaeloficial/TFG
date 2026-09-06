@@ -50,6 +50,10 @@ bool NetworkManager::connectWifi() {
   Serial.println("'...");
 
   WiFi.mode(WIFI_STA);
+  // Desactiva el modo de ahorro de energía del WiFi: con él activo (el valor
+  // por defecto), el ESP32 puede perder la conexión con hotspots móviles y no
+  // recuperarla nunca por sí solo — es la causa más habitual de este síntoma.
+  WiFi.setSleep(false);
   WiFi.begin(network_config::WIFI_SSID, network_config::WIFI_PASSWORD);
 
   uint32_t start = millis();
@@ -120,12 +124,28 @@ void NetworkManager::loop() {
     // kReconnectIntervalMs y vuelve enseguida — el resto de loop() (RFID/QR)
     // sigue funcionando aunque la red esté caída; lo no publicado se queda
     // en la cola local hasta que vuelva la conexión.
+    wifiWasDown_ = true;
     if (now - lastWifiRetryMs_ > kReconnectIntervalMs) {
       lastWifiRetryMs_ = now;
       Serial.println("WiFi desconectado, reintentando...");
-      WiFi.reconnect();
+      // WiFi.reconnect() no es fiable para recuperar una conexión ya perdida
+      // (confirmado en pruebas reales: se queda reintentando sin éxito
+      // indefinidamente). Un WiFi.begin() completo sí reinicia el proceso de
+      // conexión desde cero y consigue reconectar de verdad — pero hace falta
+      // un pequeño margen entre el disconnect() y el begin(), o el driver
+      // rechaza el intento con "wifi:sta is connecting, return error" (visto
+      // en pruebas reales) y se queda atascado repitiendo el mismo fallo.
+      WiFi.disconnect();
+      delay(100);
+      WiFi.begin(network_config::WIFI_SSID, network_config::WIFI_PASSWORD);
     }
     return;
+  }
+
+  if (wifiWasDown_) {
+    wifiWasDown_ = false;
+    Serial.print("WiFi reconectado, IP: ");
+    Serial.println(WiFi.localIP());
   }
 
   // Si el arranque ocurrió sin red disponible, la hora nunca llegó a

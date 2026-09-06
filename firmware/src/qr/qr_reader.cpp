@@ -4,7 +4,10 @@
 
 namespace {
 // Tiempo mínimo antes de aceptar una relectura del mismo código (ver comentario en qr_reader.h).
-constexpr uint32_t kDuplicateCooldownMs = 12000;
+// 7s: por debajo del intervalo de paso de caja previsto (~8s), para no bloquear una
+// relectura legítima del mismo código si esa misma ficha vuelve a pasar por el punto
+// de lectura en el siguiente ciclo.
+constexpr uint32_t kDuplicateCooldownMs = 7000;
 }  // namespace
 
 void QrReader::begin(int rx_pin, uint8_t uart_num, uint32_t baud_rate) {
