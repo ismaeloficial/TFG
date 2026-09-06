@@ -80,7 +80,13 @@ export default function GraficaLecturasPorDia({ historial }) {
             <XAxis dataKey="etiqueta" tick={{ fontSize: 11 }} interval={vista === "mes" ? 2 : 0} />
             <YAxis allowDecimals={false} tick={{ fontSize: 11 }} width={28} />
             <Tooltip />
-            <Bar dataKey="count" fill="#2f8f4e" radius={[3, 3, 0, 0]} />
+            {/* Sin animación: el historial se refresca cada 4s con un array nuevo
+                aunque los valores no cambien, y la animación de entrada de Recharts
+                se reinicia en cada refresco — la barra nunca llegaba a asentarse en
+                su altura real, se veía casi vacía casi todo el tiempo (bug real
+                encontrado el 6 sep verificando esta gráfica antes de usarla en la
+                memoria). */}
+            <Bar dataKey="count" fill="#2f8f4e" radius={[3, 3, 0, 0]} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -5,7 +5,17 @@ const DIAS_VENTANA = 14;
 const PALETA = ["#2f8f4e", "#e0631e", "#c0392b", "#1a5fb4", "#8e44ad", "#d4a017"];
 
 function claveDia(date) {
-  return date.toISOString().slice(0, 10);
+  // Componentes en hora LOCAL, no UTC: con toISOString() (UTC) y España en
+  // verano (UTC+2), la medianoche local de "hoy" cae en las 22:00 UTC de
+  // "ayer", así que el día de hoy nunca aparecía como clave — quedaba
+  // desplazado un día hacia atrás y sus lecturas se descartaban sin más
+  // (confirmado el 6 sep con datos reales: el hueco de hoy no salía en la
+  // gráfica). getFullYear()/getMonth()/getDate() son locales, igual que el
+  // resto de este cálculo (desde/dias más abajo), así que quedan consistentes.
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function etiquetaDia(claveISO) {
@@ -79,6 +89,7 @@ export default function GraficaFrutas({ historial, fichasByCode }) {
             strokeWidth={2}
             dot={{ r: 2 }}
             activeDot={{ r: 4 }}
+            isAnimationActive={false}
           />
         ))}
       </LineChart>
