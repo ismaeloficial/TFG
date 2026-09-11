@@ -4,6 +4,7 @@
 #include <WiFi.h>
 
 #include "../events/event.h"
+#include "../led/confirmation_led.h"
 #include "../storage/event_queue.h"
 
 // Gestiona WiFi, sincronización horaria (NTP) y publicación de eventos por MQTT.
@@ -23,6 +24,13 @@ class NetworkManager {
   // true solo si se publicó en el momento (false = publicado más tarde, o
   // sin cola disponible).
   bool publishEvent(const Event &event);
+
+  // Asocia el LED de confirmación, para poder señalizarlo cuando un evento
+  // pendiente de la cola local se reenvía con éxito más tarde (ver
+  // flushQueueIfAny()) — el caso de "publicado al momento" ya lo puede
+  // distinguir quien llame a publishEvent() por su valor de retorno, sin
+  // necesidad de pasar por aquí.
+  void setConfirmationLed(ConfirmationLed *led) { led_ = led; }
 
  private:
   bool connectWifi();
@@ -45,4 +53,8 @@ class NetworkManager {
   // true mientras el WiFi está caído; permite imprimir un aviso una sola vez
   // al recuperarse, en vez de no decir nada cuando la reconexión sí funciona.
   bool wifiWasDown_ = false;
+  // Opcional: si está asociado (ver setConfirmationLed()), se avisa aquí
+  // cuando un evento de la cola local se reenvía con éxito. nullptr por
+  // defecto para no obligar a nadie a tener un LED conectado.
+  ConfirmationLed *led_ = nullptr;
 };

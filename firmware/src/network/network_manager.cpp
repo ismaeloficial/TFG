@@ -112,6 +112,7 @@ void NetworkManager::flushQueueIfAny() {
   if (publishRaw(payload)) {
     eventQueue_.popFront();
     Serial.println("Evento pendiente de la cola local reenviado correctamente");
+    if (led_) led_->showSuccess();
   }
   // Si falla, se deja en la cola tal cual — se reintenta en la siguiente vuelta.
 }

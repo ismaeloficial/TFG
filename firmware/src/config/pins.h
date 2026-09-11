@@ -11,4 +11,7 @@ constexpr uint8_t RFID_UART_NUM = 2;  // controlador UART hardware nº2 del ESP3
 constexpr int QR_RX = 4;              // GPIO4 <- TXD del lector QR (cable negro en el módulo de repuesto; el azul es D- de USB, sin usar)
 constexpr uint8_t QR_UART_NUM = 1;    // controlador UART hardware nº1 del ESP32
 constexpr uint32_t QR_BAUD_RATE = 9600;  // valor de fábrica del GM861S (Form 2-1 del manual); el módulo de repuesto no se ha reconfigurado a otro baudrate
+
+// LED de confirmación visual para la presentación (ver led/confirmation_led.h).
+constexpr int LED_PIN = 25;  // GPIO25, libre de conflictos con RFID/QR ni con el arranque de la ESP32
 }  // namespace pins
