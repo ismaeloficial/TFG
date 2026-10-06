@@ -86,6 +86,13 @@ bool NetworkManager::syncTime() {
 
 bool NetworkManager::connectMqtt() {
   mqttClient_.setServer(network_config::MQTT_BROKER_HOST, network_config::MQTT_BROKER_PORT);
+  // PubSubClient bloquea el loop() entero mientras intenta conectar, hasta su
+  // timeout por defecto de 15s (MQTT_SOCKET_TIMEOUT) — con el broker
+  // inalcanzable, eso deja al sistema sin comprobar el WiFi durante ese rato,
+  // y unos pocos intentos fallidos seguidos ya suman más de un minuto sin
+  // reaccionar (confirmado en pruebas reales). 2s es tiempo de sobra para una
+  // conexión local que sí va a tener éxito, y falla mucho antes si no.
+  mqttClient_.setSocketTimeout(2);
 
   String clientId = "esp32-trazabilidad-" + WiFi.macAddress();
   if (!mqttClient_.connect(clientId.c_str())) {
@@ -125,6 +132,15 @@ void NetworkManager::loop() {
     // kReconnectIntervalMs y vuelve enseguida — el resto de loop() (RFID/QR)
     // sigue funcionando aunque la red esté caída; lo no publicado se queda
     // en la cola local hasta que vuelva la conexión.
+    if (!wifiWasDown_) {
+      // El socket TCP de la sesión MQTT muere con la propia interfaz WiFi,
+      // pero PubSubClient puede seguir reportando connected()==true si no se
+      // le avisa explícitamente (visto en pruebas reales: WiFi reconectaba
+      // solo pero la cola nunca se reenviaba). Forzar el disconnect aquí, una
+      // sola vez al caer el WiFi, garantiza que al volver la red se dispare
+      // una reconexión MQTT real en vez de quedarse en ese estado ambiguo.
+      mqttClient_.disconnect();
+    }
     wifiWasDown_ = true;
     if (now - lastWifiRetryMs_ > kReconnectIntervalMs) {
       lastWifiRetryMs_ = now;
